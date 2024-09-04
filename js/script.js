@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { CustomEase } from 'gsap/all'
 import * as THREE from 'three'
 import './main'
+import './gallery'
 
 import { resizeThreeCanvas, calcFov, debounce, lerp } from './utils'
 

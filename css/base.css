@@ -25,6 +25,7 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* Page Loader */
@@ -51,6 +52,22 @@ body {
   margin: 0 0 0 -50px;
   background: var(--color-link);
   animation: loaderAnim 1.5s ease-in-out infinite alternate forwards;
+}
+
+canvas.webgl {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+canvas.webgl2 {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes loaderAnim {
