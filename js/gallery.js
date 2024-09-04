@@ -135,7 +135,7 @@ function smoothScroll() {
   material.uniforms.scrollVelocity.value = velocity;
 
 
-  group.rotation.y = scroll.scrollY * 0.002;
+  group.rotation.y = scroll.scrollY * 0.004;
 
 
 
@@ -284,7 +284,7 @@ const initImages = function (scene) {
 
       lenis.on('scroll', () => {
         if (Math.abs(scroll.scrollVelocity) > .3) {
-          group.rotation.y = scroll.scrollY * 0.002 * 2;
+          group.rotation.y = scroll.scrollY * 0.002 * 4;
           // grp2.rotation.y = scroll.scrollY * 0.003 * 2;
       
           group.position.y = -3 + scroll.scrollY * 0.0008;
