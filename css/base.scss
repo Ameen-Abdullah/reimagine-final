@@ -762,11 +762,14 @@ video {
         left: 65%;
         width: 30%;
         flex-direction: row-reverse;
+        padding: 0 3vw;
 
         #nav-part1 {
             svg {
                 height: 6vh;
                 width: fit-content;
+        padding: 0 3vw;
+
                 display: none;
             }
         }
@@ -804,12 +807,7 @@ video {
 
 
         #webgl {
-            width: 100%;
-            height: 100vh;
-            position: absolute;
-            left: 0;
-            top: 0;
-
+            opacity: .7;
         }
     }
 
@@ -901,6 +899,7 @@ video {
         flex-direction: column;
         justify-content: flex-end;
         padding: 0 3vw;
+        margin-bottom: 10%;
 
     }
 
