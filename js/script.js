@@ -15,7 +15,7 @@ import effectFragment from '../shader/effectFragment.glsl'
 
 gsap.registerPlugin(CustomEase)
 
-const gui = new dat.GUI();
+// const gui = new dat.GUI();
 
 
 // smooth scroll (lenis)
