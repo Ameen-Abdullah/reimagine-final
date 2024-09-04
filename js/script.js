@@ -15,7 +15,7 @@ import effectFragment from '../shader/effectFragment.glsl'
 
 gsap.registerPlugin(CustomEase)
 
-const gui = new dat.GUI();
+// const gui = new dat.GUI();
 
 
 // smooth scroll (lenis)
@@ -374,3 +374,38 @@ window.addEventListener('load', () => {
 
   document.body.classList.remove('loading')
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('mousemove', (event) => {
+  const eyes = [document.getElementById('eye1'), document.getElementById('eye2')];
+  
+  eyes.forEach((eye) => {
+      const rect = eye.getBoundingClientRect();
+      
+      const eyeCenterX = rect.left + rect.width / 2;
+      const eyeCenterY = rect.top + rect.height / 2;
+      
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+      
+      const dx = mouseX - eyeCenterX;
+      const dy = mouseY - eyeCenterY;
+      
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = 5; // Maximum distance to move the eye
+      const moveRatio = Math.min(maxDistance / distance, 1);
+      
+      eye.style.transform = `translate(${dx * moveRatio}px, ${dy * moveRatio}px)`;
+  });
+});
