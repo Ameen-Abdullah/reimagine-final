@@ -12,6 +12,8 @@ import baseVertex from '../shader/baseVertex.glsl'
 import baseFragment from '../shader/baseFragment.glsl'
 import effectVertex from '../shader/effectVertex.glsl'
 import effectFragment from '../shader/effectFragment.glsl'
+import { GLTFLoader } from 'three/examples/jsm/Addons.js'
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 gsap.registerPlugin(CustomEase)
 
@@ -270,17 +272,11 @@ material = new THREE.ShaderMaterial({
 })
 
 
-// tl = gsap.timeline()
-// tl.to(material.uniforms.uCorners.value, { x: 1, duration: .5, ease: "sine.inOut" })
-// tl.to(material.uniforms.uCorners.value, { y: 1, duration: .5, ease: "sine.inOut" }, "-=.2")
-// tl.to(material.uniforms.uCorners.value, { z: 1, duration: .5, ease: "sine.inOut" }, "-=.4")
-// tl.to(material.uniforms.uCorners.value, { w: 1, duration: .5, ease: "sine.inOut" }, "-=.6")
+let gltfLoader = new GLTFLoader();
 
-// gui.add(settings, 'progress', 0, 1, 0.01).onChange((value) => {
-//   mediaStore.forEach((object) => {
-//     object.material.uniforms.uProgress.value = value
-//   })
-// })
+gltfLoader.load('./assets/alien.glb', (gltf) => {
+  
+})
 
 let video = document.createElement('video');
 video.src = "./assets/videos/select.mp4";
