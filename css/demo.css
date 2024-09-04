@@ -25,9 +25,9 @@ html , body{
 
 
 /* webgl */
-[data-webgl-media] {
-  opacity: 0;
-}
+[data-webgl-media], [data-webgl-media2]{
+    opacity: 0;
+  }
 
 /* demo */
 

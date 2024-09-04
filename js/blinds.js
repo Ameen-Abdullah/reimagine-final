@@ -2,23 +2,13 @@ import Lenis from 'lenis'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/all'
 import * as THREE from 'three'
-import './main'
-import './gallery'
-import './blinds'
 import { resizeThreeCanvas, calcFov, debounce, lerp } from './utils'
+import blindVert from '../shader/blindVert.glsl'
+import blindFrag from '../shader/blindFrag.glsl'
 
-import * as dat from 'dat.gui';
-import baseVertex from '../shader/baseVertex.glsl'
-import baseFragment from '../shader/baseFragment.glsl'
-import effectVertex from '../shader/effectVertex.glsl'
-import effectFragment from '../shader/effectFragment.glsl'
 import disp from '../assets/images/ice.jpg'
 
-
 gsap.registerPlugin(CustomEase)
-
-// const gui = new dat.GUI();
-
 
 // smooth scroll (lenis)
 let scroll = {
@@ -39,7 +29,6 @@ function scrollRaf(time) {
 }
 
 requestAnimationFrame(scrollRaf)
-
 
 
 // cursor position
@@ -80,9 +69,6 @@ window.addEventListener('mousemove', (event) => {
   }
 })
 
-// helper for image-to-webgl and uniform updates
-// this lerps when entering the texture with cursor
-
 
 // this updates the cursor position uniform on the texture
 const handleMousePos = (e, index) => {
@@ -100,35 +86,26 @@ let settings = {
 
 // this lerps when leaving the texture with cursor
 const handleMouseLeave = (index) => {
-
   gsap.to(
     mediaStore[index].mouseOverPos.target,
-    { x: 0.5, y: 0.5, duration: 0.6, ease: CustomEase.create('custom', '0.4, 0, 0.2, 1') }
+    { x: 0.5, y: 0.5, duration: 2, ease: CustomEase.create('custom', '0.4, 0, 0.2, 1') }
   )
 }
 // this gets all image html tags and creates a mesh for each
 const setMediaStore = (scrollY) => {
-  const media = [...document.querySelectorAll('[data-webgl-media]')]
+  const media = [...document.querySelectorAll('[data-webgl-media2]')]
 
   mediaStore = media.map((media, i) => {
     observer.observe(media)
 
     const imageMaterial = material.clone()
 
-
-
     media.dataset.index = String(i)
     media.addEventListener('mousemove', e => handleMousePos(e, i));
+
+
     media.addEventListener('click', () => {
-      tl = gsap.timeline()
-      tl.to(imageMaterial.uniforms.uCorners.value, { x: 1, duration: .7, ease: "sine.inOut" })
-      tl.to(imageMaterial.uniforms.uCorners.value, { z: 1, duration: .6, ease: "sine.inOut" }, "-=.5")
-      tl.to(imageMaterial.uniforms.uCorners.value, { w: 1, duration: .65, ease: "sine.inOut" }, "-=.7")
-      tl.to(imageMaterial.uniforms.uCorners.value, { y: 1, duration: .65, ease: "sine.inOut" }, "-=.3")
-
-
-
-      gsap.to(imageMaterial.uniforms.uProgress, { value: 1, duration: 1, ease: "sine.inOut" })
+      //do somthing
     })
 
     media.addEventListener('mouseenter', () => {
@@ -144,15 +121,9 @@ const setMediaStore = (scrollY) => {
       gsap.to(mediaStore[i].material.uniforms.uEnter, { value: 0, duration: .7, ease: "sine.inOut" })
       gsap.to(mediaStore[i].material.uniforms.uEnter2, { value: 0, duration: 1, ease: "circ" })
 
-      tl = gsap.timeline()
-      tl.to(imageMaterial.uniforms.uCorners.value, { x: 0, duration: .5, ease: "sine.inOut" })
-      tl.to(imageMaterial.uniforms.uCorners.value, { z: 0, duration: .6, ease: "sine.inOut" }, "-=.5")
-      tl.to(imageMaterial.uniforms.uCorners.value, { y: 0, duration: .5, ease: "sine.inOut" }, "-=.3")
-      tl.to(imageMaterial.uniforms.uCorners.value, { w: 0, duration: .6, ease: "sine.inOut" }, "-=.7")
-
       gsap.to(imageMaterial.uniforms.uProgress, { value: 0, duration: 1, ease: "sine.inOut" })
 
-   
+
     });
 
     const bounds = media.getBoundingClientRect()
@@ -202,7 +173,6 @@ const setMediaStore = (scrollY) => {
   })
 }
 
-
 // this sets the position of the mesh based on the scroll position
 const setPositions = () => {
   mediaStore.forEach((object) => {
@@ -211,13 +181,12 @@ const setPositions = () => {
       object.mesh.position.y = -object.top + window.innerHeight / 2 - object.height / 2 + scroll.scrollY
     }
   })
- 
 }
 
 // shader
 const CAMERA_POS = 500
 
-const canvas = document.querySelector('canvas.webgl')
+const canvas = document.querySelector('canvas.webgl3')
 
 let observer
 let mediaStore
@@ -259,8 +228,8 @@ material = new THREE.ShaderMaterial({
     uScrollVelocity: { value: 0 },
     uTexture: { value: null },
     uVideo: { value: null },
-    uTextureSize: { value: new THREE.Vector2(100, 100) },
     uDisplacement: { value: new THREE.TextureLoader().load(disp) },
+    uTextureSize: { value: new THREE.Vector2(100, 100) },
     uQuadSize: { value: new THREE.Vector2(100, 100) },
     uBorderRadius: { value: 0 },
     uMouseEnter: { value: 0 },
@@ -268,17 +237,17 @@ material = new THREE.ShaderMaterial({
     uEnter2: { value: 0 },
     uProgress: { value: 0 },
     uCorners: { value: new THREE.Vector4(0, 0, 0, 0) },
-    uMouseOverPos: { value: new THREE.Vector2(0.5, 0.5) }
+    uMouseOverPos: { value: new THREE.Vector2(0.5, 0.5) },
+
+
   },
-  vertexShader: effectVertex,
-  fragmentShader: effectFragment,
+  vertexShader: blindVert,
+  fragmentShader: blindFrag,
 })
 
 
-
-
 let video = document.createElement('video');
-video.src = "./assets/videos/select.mp4";
+video.src = "./assets/videos/tao.mp4";
 video.autoplay = true;
 video.loop = true;
 video.muted = true; // Optional: mute the video if needed
@@ -369,38 +338,3 @@ window.addEventListener('load', () => {
 
   document.body.classList.remove('loading')
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-document.addEventListener('mousemove', (event) => {
-  const eyes = [document.getElementById('eye1'), document.getElementById('eye2')];
-  
-  eyes.forEach((eye) => {
-      const rect = eye.getBoundingClientRect();
-      
-      const eyeCenterX = rect.left + rect.width / 2;
-      const eyeCenterY = rect.top + rect.height / 2;
-      
-      const mouseX = event.clientX;
-      const mouseY = event.clientY;
-      
-      const dx = mouseX - eyeCenterX;
-      const dy = mouseY - eyeCenterY;
-      
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const maxDistance = 5; // Maximum distance to move the eye
-      const moveRatio = Math.min(maxDistance / distance, 1);
-      
-      eye.style.transform = `translate(${dx * moveRatio}px, ${dy * moveRatio}px)`;
-  });
-});
