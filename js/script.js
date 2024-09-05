@@ -283,7 +283,6 @@ video.autoplay = true;
 video.loop = true;
 video.muted = true; // Optional: mute the video if needed
 video.playsInline = true;
-
 var videoTexture = new THREE.VideoTexture(video);
 videoTexture.needsUpdate = true;
 videoTexture.minFilter = THREE.LinearFilter;
